@@ -30,4 +30,8 @@ public class User {
     private Set<String> roles; // ex : ADMIN, EDITOR, VIEWER
 
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    public boolean isAdmin() {
+        return roles != null && roles.contains("ADMIN");
+    }
 }

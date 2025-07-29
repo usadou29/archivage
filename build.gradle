@@ -37,8 +37,33 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	testImplementation 'org.junit.platform:junit-platform-suite-api:1.10.2'
+
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+	testImplementation 'org.assertj:assertj-core:3.25.3'
+
+	testImplementation 'org.mockito:mockito-core:5.11.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.11.0'
+
+	// Cucumber dependencies
+	testImplementation 'io.cucumber:cucumber-java:7.15.0'
+	testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.15.0'
+	testImplementation 'io.cucumber:cucumber-junit:7.15.0'
+	testImplementation 'junit:junit:4.13.2'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+	
+	// Inclure JUnit 4 pour les tests Cucumber
+	useJUnit()
+	
+	// Force l'inclusion des classes Suite (ex : RunCucumberTest)
+	include '**/*Test.class'
+	include '**/*Tests.class'
+	include '**/*Suite.class'
+	
+	// Configuration spécifique pour Cucumber
+	systemProperty 'cucumber.filter.tags', System.getProperty('cucumber.filter.tags', '')
 }
