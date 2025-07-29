@@ -17,6 +17,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -35,6 +36,7 @@ public class ArchivageStepDefs {
     private User utilisateur;
     private Document documentSoumis;
     private ResponseEntity<String> response;
+
     
     private int port = 8080; // Port fixe pour les tests
 
@@ -120,4 +122,6 @@ public class ArchivageStepDefs {
         assertThat(documents).isNotEmpty();
         logger.info("-------Step exécuté: document trouvé en base ({} occurrences)-------", documents.size());
     }
+
+
 }
