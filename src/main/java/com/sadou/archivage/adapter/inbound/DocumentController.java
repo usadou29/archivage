@@ -2,7 +2,9 @@ package com.sadou.archivage.adapter.inbound;
 
 import com.sadou.archivage.adapter.inbound.dto.DocumentDto;
 import com.sadou.archivage.adapter.inbound.dto.RechercheRequestDto;
+import com.sadou.archivage.adapter.inbound.dto.ValidationErrorDto;
 import com.sadou.archivage.adapter.inbound.mapper.DocumentMapper;
+import com.sadou.archivage.adapter.inbound.validator.DocumentValidator;
 import com.sadou.archivage.application.port.inbound.ArchiverDocumentPort;
 import com.sadou.archivage.application.port.inbound.RechercherDocumentsPort;
 import com.sadou.archivage.domain.entity.Document;
@@ -10,10 +12,13 @@ import com.sadou.archivage.domain.entity.User;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -23,17 +28,39 @@ public class DocumentController {
     private final ArchiverDocumentPort archiverDocumentPort;
     private final RechercherDocumentsPort rechercherDocumentsPort;
     private final DocumentMapper documentMapper;
+    private final DocumentValidator documentValidator;
 
     public DocumentController(ArchiverDocumentPort archiverDocumentPort, 
                            RechercherDocumentsPort rechercherDocumentsPort,
-                           @Qualifier("inboundDocumentMapper") DocumentMapper documentMapper) {
+                           @Qualifier("inboundDocumentMapper") DocumentMapper documentMapper,
+                           DocumentValidator documentValidator) {
         this.archiverDocumentPort = archiverDocumentPort;
         this.rechercherDocumentsPort = rechercherDocumentsPort;
         this.documentMapper = documentMapper;
+        this.documentValidator = documentValidator;
     }
 
     @PostMapping
-    public ResponseEntity<DocumentDto> archiverDocument(@RequestBody DocumentDto documentDto) {
+    public ResponseEntity<?> archiverDocument(@RequestBody DocumentDto documentDto, BindingResult bindingResult) {
+        // Valider les données d'entrée
+        documentValidator.validate(documentDto, bindingResult);
+        
+        if (bindingResult.hasErrors()) {
+            // Créer un DTO d'erreur de validation
+            Map<String, List<String>> fieldErrors = bindingResult.getFieldErrors().stream()
+                    .collect(Collectors.groupingBy(
+                            FieldError::getField,
+                            Collectors.mapping(FieldError::getDefaultMessage, Collectors.toList())
+                    ));
+            
+            ValidationErrorDto errorDto = new ValidationErrorDto(
+                    "Erreur de validation des données", 
+                    fieldErrors
+            );
+            
+            return ResponseEntity.badRequest().body(errorDto);
+        }
+        
         // Convertir le DTO en entité de domaine
         Document document = documentMapper.toDomainEntity(documentDto);
         
