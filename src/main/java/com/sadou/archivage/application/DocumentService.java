@@ -17,11 +17,7 @@ public class DocumentService {
     private DocumentRepository documentRepository;
 
     public Document archiverDocument(String nomFichier, User utilisateur) {
-        Document document = new Document();
-        document.setNom(nomFichier);
-        document.setType("PDF");
-        document.setAuteur(utilisateur.getUsername());
-        document.setDateArchivage(LocalDateTime.now());
+        Document document = Document.creer(nomFichier, "PDF", utilisateur.getUsername());
         return documentRepository.save(document);
     }
 

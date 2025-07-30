@@ -73,10 +73,7 @@ public class ArchivageStepDefs {
         logger.info("Test direct du contrôleur sans serveur web");
         
         // Créer le payload pour la requête
-        Document document = new Document();
-        document.setNom(nomDocument);
-        document.setType("PDF");
-        document.setAuteur(utilisateur.getUsername());
+        Document document = Document.creer(nomDocument, "PDF", utilisateur.getUsername());
         
         // Appeler directement le service au lieu du contrôleur
         try {
@@ -109,15 +106,15 @@ public class ArchivageStepDefs {
 
     @Et("les métadonnées du document sont enregistrées automatiquement")
     public void les_metadonnees_du_document_sont_enregistrees_automatiquement() {
-        assertThat(documentSoumis.getNom()).isNotNull();
-        assertThat(documentSoumis.getType()).isEqualTo("PDF");
+        assertThat(documentSoumis.getNomString()).isNotNull();
+        assertThat(documentSoumis.getTypeString()).isEqualTo("PDF");
         logger.info("-------Step exécuté: métadonnées enregistrées-------");
     }
 
     @Et("le document existe en base avec le nom {string}")
     public void le_document_existe_en_base_avec_le_nom(String nom) {
         List<Document> documents = documentRepository.findAll().stream()
-                .filter(doc -> doc.getNom().equals(nom))
+                .filter(doc -> doc.getNomString().equals(nom))
                 .toList();
         assertThat(documents).isNotEmpty();
         logger.info("-------Step exécuté: document trouvé en base ({} occurrences)-------", documents.size());

@@ -3,6 +3,7 @@ package com.sadou.archivage.bdd;
 import com.sadou.archivage.application.DocumentService;
 import com.sadou.archivage.domain.Document;
 import com.sadou.archivage.domain.User;
+import com.sadou.archivage.domain.valueobject.DateArchivage;
 import com.sadou.archivage.infrastructure.DocumentRepository;
 import io.cucumber.java.fr.Alors;
 import io.cucumber.java.fr.Et;
@@ -42,35 +43,23 @@ public class RechercheStepDefs {
         janeSmith.setRoles(Set.of("VIEWER"));
 
         // Document de John Doe créé en 2025
-        Document doc1 = new Document();
-        doc1.setNom("Rapport_2025_John.pdf");
-        doc1.setType("PDF");
-        doc1.setAuteur("John Doe");
-        doc1.setDateArchivage(LocalDateTime.of(2025, 2, 15, 10, 30));
+        Document doc1 = Document.creer("Rapport_2025_John.pdf", "PDF", "John Doe");
+        doc1.setDateArchivage(new DateArchivage(LocalDateTime.of(2025, 2, 15, 10, 30)));
         documentRepository.save(doc1);
 
         // Document de John Doe créé en 2024 (ne devrait pas être trouvé)
-        Document doc2 = new Document();
-        doc2.setNom("Rapport_2024_John.pdf");
-        doc2.setType("PDF");
-        doc2.setAuteur("John Doe");
-        doc2.setDateArchivage(LocalDateTime.of(2024, 12, 15, 10, 30));
+        Document doc2 = Document.creer("Rapport_2024_John.pdf", "PDF", "John Doe");
+        doc2.setDateArchivage(new DateArchivage(LocalDateTime.of(2024, 12, 15, 10, 30)));
         documentRepository.save(doc2);
 
         // Document de Jane Smith créé en 2025 (ne devrait pas être trouvé)
-        Document doc3 = new Document();
-        doc3.setNom("Rapport_2025_Jane.pdf");
-        doc3.setType("PDF");
-        doc3.setAuteur("Jane Smith");
-        doc3.setDateArchivage(LocalDateTime.of(2025, 3, 20, 14, 45));
+        Document doc3 = Document.creer("Rapport_2025_Jane.pdf", "PDF", "Jane Smith");
+        doc3.setDateArchivage(new DateArchivage(LocalDateTime.of(2025, 3, 20, 14, 45)));
         documentRepository.save(doc3);
 
         // Document de John Doe créé en 2025 (devrait être trouvé)
-        Document doc4 = new Document();
-        doc4.setNom("Memo_2025_John.pdf");
-        doc4.setType("PDF");
-        doc4.setAuteur("John Doe");
-        doc4.setDateArchivage(LocalDateTime.of(2025, 1, 15, 9, 15));
+        Document doc4 = Document.creer("Memo_2025_John.pdf", "PDF", "John Doe");
+        doc4.setDateArchivage(new DateArchivage(LocalDateTime.of(2025, 1, 15, 9, 15)));
         documentRepository.save(doc4);
 
         logger.info("-------Step exécuté: {} documents de test créés-------", documentRepository.count());
@@ -82,8 +71,8 @@ public class RechercheStepDefs {
         
         // Rechercher les documents de l'auteur créés après la date limite
         List<Document> documentsTrouves = documentRepository.findAll().stream()
-                .filter(doc -> doc.getAuteur().equals(auteur))
-                .filter(doc -> doc.getDateArchivage().isAfter(dateLimiteParsed))
+                .filter(doc -> doc.getAuteurString().equals(auteur))
+                .filter(doc -> doc.getDateArchivageLocalDateTime().isAfter(dateLimiteParsed))
                 .toList();
         
         // Stocker les résultats pour les assertions
@@ -102,8 +91,8 @@ public class RechercheStepDefs {
         LocalDateTime dateLimite = LocalDateTime.of(2025, 1, 1, 0, 0);
         
         for (Document doc : documentsRecherches) {
-            assertThat(doc.getAuteur()).isEqualTo("John Doe");
-            assertThat(doc.getDateArchivage()).isAfter(dateLimite);
+            assertThat(doc.getAuteurString()).isEqualTo("John Doe");
+            assertThat(doc.getDateArchivageLocalDateTime()).isAfter(dateLimite);
         }
         
         logger.info("-------Step exécuté: {} documents correspondants validés-------", documentsRecherches.size());

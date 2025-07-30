@@ -23,9 +23,9 @@ public class DocumentController {
         // Pour simplifier, on crée un utilisateur temporaire
         // En production, on récupérerait l'utilisateur depuis le contexte de sécurité
         User utilisateur = new User();
-        utilisateur.setUsername(document.getAuteur() != null ? document.getAuteur() : "default-user");
+        utilisateur.setUsername(document.getAuteurString() != null ? document.getAuteurString() : "default-user");
         
-        Document documentArchive = documentService.archiverDocument(document.getNom(), utilisateur);
+        Document documentArchive = documentService.archiverDocument(document.getNomString(), utilisateur);
         return ResponseEntity.status(HttpStatus.CREATED).body(documentArchive);
     }
 
