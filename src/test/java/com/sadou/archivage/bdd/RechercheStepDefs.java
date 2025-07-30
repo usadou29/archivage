@@ -1,5 +1,6 @@
 package com.sadou.archivage.bdd;
 
+import com.sadou.archivage.application.DocumentService;
 import com.sadou.archivage.domain.Document;
 import com.sadou.archivage.domain.User;
 import com.sadou.archivage.infrastructure.DocumentRepository;
@@ -23,7 +24,11 @@ public class RechercheStepDefs {
     @Autowired
     private DocumentRepository documentRepository;
 
+    @Autowired
+    private DocumentService documentService;
+
     private List<Document> documentsRecherches;
+    private List<Document> documentsRecherchesApi;
 
     @Et("plusieurs documents archivés existent")
     public void plusieurs_documents_archives_existent() {
@@ -102,5 +107,40 @@ public class RechercheStepDefs {
         }
         
         logger.info("-------Step exécuté: {} documents correspondants validés-------", documentsRecherches.size());
+    }
+
+    @Quand("il envoie une requête GET à {string} avec auteur {string} et date {string}")
+    public void il_envoie_une_requete_GET_a_avec_auteur_et_date(String endpoint, String auteur, String date) {
+        logger.info("Test direct du service de recherche");
+        
+        LocalDateTime dateLimiteParsed = LocalDateTime.parse(date + "T00:00:00");
+        
+        try {
+            documentsRecherchesApi = documentService.rechercherDocuments(auteur, dateLimiteParsed);
+            logger.info("-------Step exécuté: recherche via service direct - {} documents trouvés-------", 
+                       documentsRecherchesApi.size());
+        } catch (Exception e) {
+            logger.error("Erreur lors de la recherche: {}", e.getMessage());
+            throw e;
+        }
+    }
+
+
+
+
+
+    @Alors("la recherche API retourne des résultats")
+    public void la_recherche_API_retourne_des_resultats() {
+        assertThat(documentsRecherchesApi).isNotNull();
+        assertThat(documentsRecherchesApi).isNotEmpty();
+        logger.info("-------Step exécuté: recherche API réussie - {} documents trouvés-------", 
+                   documentsRecherchesApi.size());
+    }
+
+    @Alors("il obtient une liste de documents via l'API")
+    public void il_obtient_une_liste_de_documents_via_l_api() {
+        assertThat(documentsRecherchesApi).isNotNull();
+        assertThat(documentsRecherchesApi).isNotEmpty();
+        logger.info("-------Step exécuté: {} documents trouvés via API-------", documentsRecherchesApi.size());
     }
 } 

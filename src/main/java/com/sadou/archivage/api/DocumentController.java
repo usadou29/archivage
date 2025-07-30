@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/documents")
 public class DocumentController {
@@ -24,5 +27,17 @@ public class DocumentController {
         
         Document documentArchive = documentService.archiverDocument(document.getNom(), utilisateur);
         return ResponseEntity.status(HttpStatus.CREATED).body(documentArchive);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Document>> rechercherDocuments(
+            @RequestParam String auteur,
+            @RequestParam String dateLimite) {
+        
+        LocalDateTime dateLimiteParsed = LocalDateTime.parse(dateLimite + "T00:00:00");
+        
+        List<Document> documents = documentService.rechercherDocuments(auteur, dateLimiteParsed);
+        
+        return ResponseEntity.ok(documents);
     }
 } 
