@@ -1,13 +1,13 @@
-package com.sadou.archivage.domain;
+package com.sadou.archivage.domain.entity;
 
 import com.sadou.archivage.domain.valueobject.Auteur;
 import com.sadou.archivage.domain.valueobject.DateArchivage;
 import com.sadou.archivage.domain.valueobject.DocumentNom;
 import com.sadou.archivage.domain.valueobject.DocumentType;
-import com.sadou.archivage.infrastructure.converter.AuteurConverter;
-import com.sadou.archivage.infrastructure.converter.DateArchivageConverter;
-import com.sadou.archivage.infrastructure.converter.DocumentNomConverter;
-import com.sadou.archivage.infrastructure.converter.DocumentTypeConverter;
+import com.sadou.archivage.infrastructure.persistence.converter.AuteurConverter;
+import com.sadou.archivage.infrastructure.persistence.converter.DateArchivageConverter;
+import com.sadou.archivage.infrastructure.persistence.converter.DocumentNomConverter;
+import com.sadou.archivage.infrastructure.persistence.converter.DocumentTypeConverter;
 import jakarta.persistence.*;
 import lombok.Data;
 

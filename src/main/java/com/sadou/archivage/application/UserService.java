@@ -1,6 +1,6 @@
 package com.sadou.archivage.application;
 
-import com.sadou.archivage.domain.User;
+import com.sadou.archivage.domain.entity.User;
 import com.sadou.archivage.infrastructure.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.sadou.archivage.infrastructure.converter;
+package com.sadou.archivage.infrastructure.persistence.converter;
 
 import com.sadou.archivage.domain.valueobject.DocumentType;
 import jakarta.persistence.AttributeConverter;

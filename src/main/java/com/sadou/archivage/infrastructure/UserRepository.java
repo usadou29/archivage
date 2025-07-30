@@ -1,6 +1,6 @@
 package com.sadou.archivage.infrastructure;
 
-import com.sadou.archivage.domain.User;
+import com.sadou.archivage.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

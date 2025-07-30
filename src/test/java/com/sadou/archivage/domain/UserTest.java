@@ -1,5 +1,6 @@
 package com.sadou.archivage.domain;
 
+import com.sadou.archivage.domain.entity.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

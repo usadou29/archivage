@@ -1,9 +1,9 @@
 package com.sadou.archivage.bdd;
 
-import com.sadou.archivage.application.DocumentService;
-import com.sadou.archivage.domain.User;
-import com.sadou.archivage.domain.Document;
-import com.sadou.archivage.infrastructure.DocumentRepository;
+import com.sadou.archivage.application.usecase.ArchiverDocumentUseCase;
+import com.sadou.archivage.domain.entity.User;
+import com.sadou.archivage.domain.entity.Document;
+import com.sadou.archivage.application.port.DocumentRepository;
 import io.cucumber.java.fr.Alors;
 import io.cucumber.java.fr.Et;
 import io.cucumber.java.fr.Quand;
@@ -41,7 +41,7 @@ public class ArchivageStepDefs {
     private int port = 8080; // Port fixe pour les tests
 
     @Autowired
-    private DocumentService documentService;
+    private ArchiverDocumentUseCase archiverDocumentUseCase;
 
     @Autowired
     private DocumentRepository documentRepository;
@@ -60,7 +60,7 @@ public class ArchivageStepDefs {
     @Quand("il soumet un nouveau document PDF nommé {string}")
     public void il_soumet_un_nouveau_document_PDF_nomme(String nomFichier) {
         try {
-            documentSoumis = documentService.archiverDocument(nomFichier, utilisateur);
+            documentSoumis = archiverDocumentUseCase.archiverDocument(nomFichier, utilisateur);
             logger.info("-------Step exécuté: document soumis {}-------", nomFichier);
         } catch (Exception e) {
             logger.error("Erreur lors de l'archivage: {}", e.getMessage());
@@ -77,7 +77,7 @@ public class ArchivageStepDefs {
         
         // Appeler directement le service au lieu du contrôleur
         try {
-            Document documentArchive = documentService.archiverDocument(nomDocument, utilisateur);
+            Document documentArchive = archiverDocumentUseCase.archiverDocument(nomDocument, utilisateur);
             logger.info("Document archivé avec succès: {}", documentArchive.getNom());
             
             // Simuler une réponse HTTP 201

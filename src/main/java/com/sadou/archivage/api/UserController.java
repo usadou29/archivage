@@ -1,6 +1,6 @@
 package com.sadou.archivage.api;
 
-import com.sadou.archivage.domain.User;
+import com.sadou.archivage.domain.entity.User;
 import com.sadou.archivage.infrastructure.UserRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;

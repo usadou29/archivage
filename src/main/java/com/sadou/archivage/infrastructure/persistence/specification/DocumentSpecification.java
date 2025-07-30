@@ -1,13 +1,13 @@
-package com.sadou.archivage.infrastructure.specification;
+package com.sadou.archivage.infrastructure.persistence.specification;
 
-import com.sadou.archivage.domain.Document;
+import com.sadou.archivage.infrastructure.persistence.entity.DocumentJpaEntity;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
 
 public class DocumentSpecification {
 
-    public static Specification<Document> hasAuteur(String auteur) {
+    public static Specification<DocumentJpaEntity> hasAuteur(String auteur) {
         return (root, query, criteriaBuilder) -> {
             if (auteur == null || auteur.trim().isEmpty()) {
                 return criteriaBuilder.conjunction();
@@ -16,7 +16,7 @@ public class DocumentSpecification {
         };
     }
 
-    public static Specification<Document> createdAfter(LocalDateTime dateLimite) {
+    public static Specification<DocumentJpaEntity> createdAfter(LocalDateTime dateLimite) {
         return (root, query, criteriaBuilder) -> {
             if (dateLimite == null) {
                 return criteriaBuilder.conjunction();
@@ -25,7 +25,7 @@ public class DocumentSpecification {
         };
     }
 
-    public static Specification<Document> searchByAuteurAndDate(String auteur, LocalDateTime dateLimite) {
+    public static Specification<DocumentJpaEntity> searchByAuteurAndDate(String auteur, LocalDateTime dateLimite) {
         return Specification.where(hasAuteur(auteur))
                           .and(createdAfter(dateLimite));
     }

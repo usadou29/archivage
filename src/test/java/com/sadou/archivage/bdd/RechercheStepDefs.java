@@ -1,10 +1,10 @@
 package com.sadou.archivage.bdd;
 
-import com.sadou.archivage.application.DocumentService;
-import com.sadou.archivage.domain.Document;
-import com.sadou.archivage.domain.User;
+import com.sadou.archivage.application.usecase.RechercherDocumentsUseCase;
+import com.sadou.archivage.domain.entity.Document;
+import com.sadou.archivage.domain.entity.User;
 import com.sadou.archivage.domain.valueobject.DateArchivage;
-import com.sadou.archivage.infrastructure.DocumentRepository;
+import com.sadou.archivage.application.port.DocumentRepository;
 import io.cucumber.java.fr.Alors;
 import io.cucumber.java.fr.Et;
 import io.cucumber.java.fr.Quand;
@@ -26,7 +26,7 @@ public class RechercheStepDefs {
     private DocumentRepository documentRepository;
 
     @Autowired
-    private DocumentService documentService;
+    private RechercherDocumentsUseCase rechercherDocumentsUseCase;
 
     private List<Document> documentsRecherches;
     private List<Document> documentsRecherchesApi;
@@ -105,7 +105,7 @@ public class RechercheStepDefs {
         LocalDateTime dateLimiteParsed = LocalDateTime.parse(date + "T00:00:00");
         
         try {
-            documentsRecherchesApi = documentService.rechercherDocuments(auteur, dateLimiteParsed);
+            documentsRecherchesApi = rechercherDocumentsUseCase.rechercherDocuments(auteur, dateLimiteParsed);
             logger.info("-------Step exécuté: recherche via service direct - {} documents trouvés-------", 
                        documentsRecherchesApi.size());
         } catch (Exception e) {

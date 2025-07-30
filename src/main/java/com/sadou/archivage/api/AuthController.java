@@ -1,6 +1,6 @@
 package com.sadou.archivage.api;
 
-import com.sadou.archivage.domain.User;
+import com.sadou.archivage.domain.entity.User;
 import com.sadou.archivage.infrastructure.UserRepository;
 import com.sadou.archivage.infrastructure.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;

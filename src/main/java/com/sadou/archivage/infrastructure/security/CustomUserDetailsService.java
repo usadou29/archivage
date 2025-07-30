@@ -1,6 +1,6 @@
 package com.sadou.archivage.infrastructure.security;
 
-import com.sadou.archivage.domain.User;
+import com.sadou.archivage.domain.entity.User;
 import com.sadou.archivage.infrastructure.UserRepository;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

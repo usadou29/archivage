@@ -1,4 +1,4 @@
-package com.sadou.archivage.domain;
+package com.sadou.archivage.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
